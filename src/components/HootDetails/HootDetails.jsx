@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
 import * as hootService from '../../services/hootService';
 import { useState, useEffect } from 'react';
+import Loading from '../Loading/Loading';
+
 
 const HootDetails = (props) => {
     const [hoot, setHoot] = useState(null);
@@ -14,11 +16,7 @@ const HootDetails = (props) => {
         fetchHoot();
       }, [hootId]);
       
-      if (!hoot) 
-        return 
-        <main>
-            Loading...
-        </main>;
+      if (!hoot) return <Loading />
       
     return (
         <main>
