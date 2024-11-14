@@ -10,7 +10,7 @@ const HootForm = (props) => {
     category: 'News',
   });
   
-  const { hootId } = useParams();
+  const { hootId, commentId } = useParams();
 
   useEffect(() => {
     const fetchHoot = async () => {

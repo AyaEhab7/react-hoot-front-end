@@ -6,8 +6,6 @@ import CommentForm from '../CommentForm/CommentForm';
 import { AuthedUserContext } from '../../App';
 import { Link } from 'react-router-dom';
 
-
-
 const HootDetails = (props) => {
     const [hoot, setHoot] = useState(null);
     const { hootId } = useParams();
@@ -25,9 +23,14 @@ const HootDetails = (props) => {
         const newComment = await hootService.createComment(hootId, commentFormData);
         setHoot({ ...hoot, comments: [...hoot.comments, newComment] });
       };
-      
 
-      
+      const handleDeleteComment = async (commentId) => {
+        //console.log('Deleting comment with ID:', commentId);
+        const deleteComment = await hootService.deleteComment(hootId, commentId);
+        setHoot({...hoot,comments: hoot.comments.filter((comment) => comment._id !== commentId),
+        });
+      };
+         
       if (!hoot) return <Loading />
       
     return (
@@ -60,6 +63,13 @@ const HootDetails = (props) => {
                     {comment.author.username} posted on
                     {new Date(comment.createdAt).toLocaleDateString()}
                     </p>
+                           {/* Edit and Delete Comment UI */}
+                      {comment.author._id === user._id && (
+                        <>
+                          <Link to={`/hoots/${hootId}/comments/${comment._id}/edit`}>Edit</Link>
+                          <button onClick={() => props.handleDeleteComment(comment._id)}>Delete</button>
+                        </>
+                      )}                   
                 </header>
                 <p>{comment.text}</p>
                 </article>
