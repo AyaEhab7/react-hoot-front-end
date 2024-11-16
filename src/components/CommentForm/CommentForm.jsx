@@ -13,7 +13,6 @@ const CommentForm = (props) => {
   const [formData, setFormData] = useState({ text: '' });
   const { hootId, commentId } = useParams();
 
-
   useEffect(() => {
     const fetchHoot = async () => {
       const hootData = await hootService.show(hootId);
@@ -21,6 +20,7 @@ const CommentForm = (props) => {
       setFormData(commentData);
     };
   
+
     if (hootId && commentId) fetchHoot();
   }, [hootId, commentId]);
 
