@@ -1,24 +1,29 @@
+// Styling:
+import styles from './HootList.module.css';
 import { Link } from 'react-router-dom';
 
-const HootList = (props) => {
-    return (
-        <main>
-          {props.hoots.map((hoot) => (
-            <Link key={hoot._id} to={`/hoots/${hoot._id}`}>
-              <article>
-                <header>
-                  <h2>{hoot.title}</h2>
-                  <p>
-                    {hoot.author.username} posted on 
-                    {new Date(hoot.createdAt).toLocaleDateString()}
-                  </p>
-                </header>
-                <p>{hoot.text}</p>
-              </article>
-            </Link>
-          ))}
-        </main>
-      );
-  };
+import Icon from '../Icon/Icon';
+import AuthorInfo from '../../components/AuthorInfo/AuthorInfo';
 
-export default HootList
+const HootList = (props) => {
+  return (
+    <main className={styles.container}>
+      {props.hoots.map((hoot) => (
+        <Link key={hoot._id} to={`/hoots/${hoot._id}`}>
+          <article>
+            <header>
+              <div>
+                <h2>{hoot.title}</h2>
+                <Icon category={hoot.category} />
+              </div>
+              <AuthorInfo content={hoot} />
+            </header>
+            <p>{hoot.text}</p>
+          </article>
+        </Link>
+      ))}
+    </main>
+  );
+};
+
+export default HootList;

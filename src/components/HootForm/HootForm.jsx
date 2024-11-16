@@ -1,7 +1,7 @@
-import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import * as hootService from '../../services/hootService';
-
+import styles from './HootForm.module.css';
 
 const HootForm = (props) => {
   const [formData, setFormData] = useState({
@@ -9,8 +9,8 @@ const HootForm = (props) => {
     text: '',
     category: 'News',
   });
-  
-  const { hootId, commentId } = useParams();
+
+  const { hootId } = useParams();
 
   useEffect(() => {
     const fetchHoot = async () => {
@@ -34,9 +34,9 @@ const HootForm = (props) => {
   };
 
   return (
-    <main>
+    <main className={styles.container}>
       <form onSubmit={handleSubmit}>
-      <h1>{hootId ? 'Edit Hoot' : 'New Hoot'}</h1>
+        <h1>{hootId ? 'Edit Hoot' : 'New Hoot'}</h1>
         <label htmlFor="title-input">Title</label>
         <input
           required

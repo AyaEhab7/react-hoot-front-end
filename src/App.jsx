@@ -22,18 +22,19 @@ export const AuthedUserContext = createContext(null);
 const App = () => {
   const [user, setUser] = useState(authService.getUser()); // using the method from authservice
   const [hoots, setHoots] = useState([]);
+
   const navigate = useNavigate();
 
-useEffect(() => {
+  useEffect(() => {
     const fetchAllHoots = async () => {
       const hootsData = await hootService.index();
-      console.log('hootsData:', hootsData);
+      console.log(hootsData);
       setHoots(hootsData);
     };
     if (user) fetchAllHoots();
-}, [user]); 
+  }, [user]);
 
-  const handleSignout = () => {
+  const handleLogout = () => {
     authService.signout();
     setUser(null);
   };
@@ -51,29 +52,41 @@ useEffect(() => {
   };
 
   const handleUpdateHoot = async (hootId, hootFormData) => {
-    const updatedHoot = await hootService.update(hootId, hootFormData);  
-    setHoots(hoots.map((hoot) => (hootId === hoot._id ? updatedHoot : hoot))); 
+    const updatedHoot = await hootService.update(hootId, hootFormData);
+    setHoots(hoots.map((hoot) => (hootId === hoot._id ? updatedHoot : hoot)));
     navigate(`/hoots/${hootId}`);
   };
 
   return (
     <>
       <AuthedUserContext.Provider value={user}>
-        <NavBar user={user} handleSignout={handleSignout} />
+        <NavBar user={user} handleLogout={handleLogout} />
         <Routes>
-          {user ? (
+          {user ?
+          // Protected Routes:
             <>
-            <Route path="/" element={<Dashboard user={user} />} />
-            <Route path="/hoots" element={<HootList hoots={hoots} />} />
-            <Route path="/hoots/:hootId" element={<HootDetails handleDeleteHoot={handleDeleteHoot} />} />
-            <Route path="/hoots/new" element={<HootForm handleAddHoot={handleAddHoot} />} />                         
-            <Route path="/hoots/:hootId/edit" element={<HootForm handleUpdateHoot={handleUpdateHoot}  />} />           
-            <Route path="/hoots/:hootId/comments/:commentId/edit" element={<CommentForm />} />           
-  
+              <Route path="/" element={<Landing />} />
+              <Route path="/hoots" element={<HootList hoots={hoots} />} />
+              <Route
+                path="/hoots/:hootId"
+                element={<HootDetails handleDeleteHoot={handleDeleteHoot} />}
+              />
+              <Route
+                path="/hoots/new"
+                element={<HootForm handleAddHoot={handleAddHoot} />}
+              />
+              <Route
+                path="/hoots/:hootId/edit"
+                element={<HootForm handleUpdateHoot={handleUpdateHoot} />}
+              />
+              <Route
+                path="/hoots/:hootId/comments/:commentId/edit"
+                element={<CommentForm />}
+              />
             </>
-          ) : (
+            :
             <Route path="/" element={<Landing />} />
-          )}
+          }
           <Route path="/signup" element={<SignupForm setUser={setUser} />} />
           <Route path="/signin" element={<SigninForm setUser={setUser} />} />
         </Routes>
